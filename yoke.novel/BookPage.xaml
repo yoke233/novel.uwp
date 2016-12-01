@@ -1,0 +1,166 @@
+﻿<Page
+    x:Class="yoke.novel.BookPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:yoke.novel"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    xmlns:data="using:yoke.novel.Model">
+    <Page.Resources>
+        <data:StringFormatConverter x:Key="StringFormatConverter" />
+    </Page.Resources>
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+
+        <RelativePanel Grid.Row="0"
+                       Background="{ThemeResource SystemControlHighlightAltListAccentLowBrush}"
+                       Padding="0,9,0,9">
+            <!--顶部-->
+            <Button Name="Back"
+                    Content="&#xE0A6;"
+                    FontFamily="Segoe MDL2 Assets"
+                    FontSize="24"
+                    RelativePanel.AlignLeftWithPanel="True"
+                    RelativePanel.AlignVerticalCenterWithPanel="True"
+                    Background="Transparent"
+                    Click="Back_Click" />
+            <TextBlock Name="PageTitle"
+                       Text="书籍详情"
+                       RelativePanel.RightOf="Back"
+                       RelativePanel.AlignVerticalCenterWithPanel="True"
+                       FontSize="24"
+                       FontFamily="微软雅黑"
+                       Padding="10,0,0,0" />
+            <Button Name="RefreshButton"
+                    Content="&#xE117;"
+                    RelativePanel.AlignRightWithPanel="True"
+                    FontFamily="Segoe MDL2 Assets"
+                    FontSize="24"
+                    RelativePanel.AlignVerticalCenterWithPanel="True"
+                    Margin="0,0,5,0"
+                    Background="Transparent" />
+        </RelativePanel>
+        <Grid Grid.Row="1" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="1">
+                    <Image Name="Avatar"
+                           Width="80"
+                           Height="120"
+                           Margin="0,0,20,0"
+                           Source="{x:Bind bookDetail.cover}"
+                           VerticalAlignment="Center" />
+                </StackPanel>
+
+                <StackPanel Grid.Column="2">
+
+                    <TextBlock Name="BookTitle"
+                               Text="{x:Bind bookDetail.title}"
+                               HorizontalAlignment="Center"
+                               FontSize="25"
+                               Margin="0,10,0,0" />
+
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Center"
+                                Margin="0,10,0,10">
+                        <TextBlock Name="Author"
+                                   Text="{x:Bind bookDetail.author}"
+                                   Padding="10,0,0,0"
+                                   VerticalAlignment="Center" />
+                        <TextBlock Name="MajorCate"
+                                   Text="{x:Bind bookDetail.majorCate}"
+                                   Padding="10,0,0,0"
+                                   VerticalAlignment="Center" />
+                        <TextBlock Name="WordCount"
+                                   Text="{x:Bind bookDetail.wordCount}"
+                                   Padding="10,0,0,0"
+                                   VerticalAlignment="Center" />
+                        <TextBlock Name="Updated"
+                                   Text="{x:Bind bookDetail.updated , Converter={StaticResource StringFormatConverter}, ConverterParameter='{}{0:dd/MM/yyy HH\\\\:mm (ddd)}'}"
+                                   Padding="10,0,0,0"
+                                   VerticalAlignment="Center" />
+
+                    </StackPanel>
+                    <StackPanel Name="InfoPanel" Visibility="Collapsed" Orientation="Horizontal"
+                                HorizontalAlignment="Center"
+                                Margin="0,10,0,10">
+                        <TextBlock
+                            Text="追书人数:"
+                            Foreground="Gray"
+                            Padding="10,0,2,0"
+                            VerticalAlignment="Center" />
+                        <TextBlock Name="LatelyFollower"
+                                   Text="{x:Bind bookDetail.latelyFollower}"
+                                   Foreground="Gray"
+                                   VerticalAlignment="Center" />
+
+                        <TextBlock
+                            Text="读者留存:"
+                            Foreground="Gray"
+                            Padding="10,0,2,0"
+                            VerticalAlignment="Center" />
+                        <TextBlock Name="RetentionRatio"
+                                   Text="{x:Bind bookDetail.retentionRatio}"
+                                   Foreground="Gray"
+                                   VerticalAlignment="Center" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Center"
+                                Margin="0,10,0,10">
+                        <TextBlock
+                            Text="书籍来源:"
+                            Foreground="Gray"
+                            Padding="10,0,10,0"
+                            VerticalAlignment="Center" />
+
+                        <ComboBox x:Name="TocBox" Width="150" DisplayMemberPath="name">
+                        </ComboBox>
+                        
+                        <Button Content="下载目录" Click="ButtonBase_OnClick"></Button>
+                    </StackPanel>
+                    <Rectangle Height="1"
+                               Fill="LightGray" />
+                </StackPanel>
+            </Grid>
+            <Grid Grid.Row="1" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" HorizontalAlignment="Center">
+                <ListView x:Name="ChapterList"
+                          SelectionMode="None"
+                          IsItemClickEnabled="True"
+                          ItemClick="ChapterList_OnItemClick">
+                    <ListView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapGrid Orientation="Horizontal" MaximumRowsOrColumns="4"/>
+                        </ItemsPanelTemplate>
+                    </ListView.ItemsPanel>
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="data:TocChapterItem">
+                            <StackPanel>
+                                <TextBlock MinWidth="250" MaxWidth="400" Text="{x:Bind title}"></TextBlock>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Grid>
+        </Grid>
+        <ProgressRing Grid.Row="1"
+                      Name="Loading"
+                      IsActive="True"
+                      Width="100"
+                      Height="100" />
+    </Grid>
+</Page>

@@ -1,0 +1,88 @@
+﻿<Page
+    x:Class="yoke.novel.ChapterPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:yoke.novel"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:data="using:yoke.novel.Model"
+    mc:Ignorable="d" KeyDown="RichTextBlock_OnKeyUp">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <RelativePanel Grid.Row="0"
+                       Background="{ThemeResource SystemControlHighlightAltListAccentLowBrush}"
+                       Padding="0,9,0,9">
+            <!--顶部-->
+            <Button Name="Back"
+                    Content="&#xE0A6;"
+                    FontFamily="Segoe MDL2 Assets"
+                    FontSize="24"
+                    RelativePanel.AlignLeftWithPanel="True"
+                    RelativePanel.AlignVerticalCenterWithPanel="True"
+                    Background="Transparent"
+                    Click="Back_OnClick" />
+            <TextBlock Name="PageTitle"
+                       Text="章节"
+                       RelativePanel.RightOf="Back"
+                       RelativePanel.AlignVerticalCenterWithPanel="True"
+                       FontSize="24"
+                       FontFamily="XHei Ubuntu Mono"
+                       Padding="10,0,0,0" />
+            <TextBlock Name="ListCount"
+                       FontSize="14"
+                       RelativePanel.RightOf="PageTitle"
+                       RelativePanel.AlignTopWith="PageTitle"
+                       Margin="10,0,0,0"
+                       Text="" />
+            <Button Name="More"
+                    Content="&#xE8C4;"
+                    FontFamily="Segoe MDL2 Assets"
+                    FontSize="24"
+                    RelativePanel.AlignRightWithPanel="True"
+                    RelativePanel.AlignVerticalCenterWithPanel="True"
+                    Background="Transparent"
+                    Click="More_OnClick" />
+            <Button Name="Font"
+                    Content="&#xE8D3;"
+                    FontFamily="Segoe MDL2 Assets"
+                    FontSize="24"
+                    RelativePanel.LeftOf="More"
+                    RelativePanel.AlignVerticalCenterWithPanel="True"
+                    Background="Transparent"
+                    Click="Font_OnClick" />
+        </RelativePanel>
+        <ScrollViewer Name="ScrollViewer"
+                      Grid.Row="1"
+                      Padding="9">
+            <Grid
+                MaxWidth="800"
+                MinWidth="446">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
+                <RichTextBlock Grid.Row="0" x:Name="RichTextBlock"
+                               DataContext="{x:Bind text}"
+                               IsTextSelectionEnabled="True"
+                               Margin="20"
+                               LineHeight="45"
+                               FontSize="24"
+                               FontFamily="XHei Ubuntu Mono" />
+                <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+                    <HyperlinkButton Name="prevPage" Content="上一页" Click="PrevPage_OnClick" />
+                    <TextBlock Width="50" />
+                    <HyperlinkButton Name="nextPage" Content="下一页" Click="NextPage_OnClick" />
+                </StackPanel>
+            </Grid>
+        </ScrollViewer>
+        <ProgressRing Grid.Row="1"
+                      Name="Loading"
+                      Width="100"
+                      Height="100"
+                      IsActive="False" />
+    </Grid>
+</Page>

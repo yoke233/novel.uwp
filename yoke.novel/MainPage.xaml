@@ -8,6 +8,103 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
+        <SplitView Name="MainSplitView" DisplayMode="CompactOverlay" CompactPaneLength="54" OpenPaneLength="165">
+            <SplitView.Pane>
+                <ListBox Name="MainNavigationList"
+                         SelectionMode="Single"
+                         SelectionChanged="mainNavigationList_SelectionChanged">
+                    <ListBoxItem Tag="0" Tapped="ListBoxItem_Tapped" Name="MenuItem">
+                        <!-- 汉堡按钮 -->
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE700;" 
+                                       FontSize="30" 
+                                       FontFamily="Segoe MDL2 Assets"/>
+                        </StackPanel>
+                    </ListBoxItem>
+                    <ListBoxItem Tag="1" Tapped="ListBoxItem_Tapped" Name="HomeItem">
+                        <!--我的书架-->
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE80F;" 
+                                       FontSize="28" 
+                                       FontFamily="Segoe MDL2 Assets"
+                                       Padding="0,4,0,0"/>
+                            <TextBlock Text="我的书架" 
+                                       FontSize="20"
+                                       FontFamily="XHei Ubuntu Mono"
+                                       Margin="24,2,0,0"/>
+                        </StackPanel>
+                    </ListBoxItem>
+                    <ListBoxItem Tag="2" Tapped="ListBoxItem_Tapped" Name="RankItem">
+                        <!--排行榜-->
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xEC05;" 
+                                       FontSize="28" 
+                                       FontFamily="Segoe MDL2 Assets"
+                                       TextAlignment="Center"
+                                       Padding="0,4,0,0"/>
+                            <TextBlock Text="排行榜" 
+                                       FontSize="20"
+                                       FontFamily="XHei Ubuntu Mono"
+                                       Margin="24,2,0,0"/>
+                        </StackPanel>
+                    </ListBoxItem>
+                    <ListBoxItem Tag="3" Tapped="ListBoxItem_Tapped" Name="SearchItem">
+                        <!--搜索-->
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE721;" 
+                                       FontSize="28" 
+                                       FontFamily="Segoe MDL2 Assets"
+                                       TextAlignment="Center"
+                                       Padding="0,4,0,0"/>
+                            <TextBlock Text="搜索" 
+                                       FontSize="20"
+                                       FontFamily="XHei Ubuntu Mono"
+                                       Margin="24,2,0,0"/>
+                        </StackPanel>
+                    </ListBoxItem>
+                    <ListBoxItem Tag="4" Tapped="ListBoxItem_Tapped" Name="DownList">
+                        <!--下载列表-->
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE896;" 
+                                       FontSize="28" 
+                                       FontFamily="Segoe MDL2 Assets"
+                                       TextAlignment="Center"
+                                       Padding="0,4,0,0"/>
+                            <TextBlock Text="下载列表" 
+                                       FontSize="20"
+                                       FontFamily="XHei Ubuntu Mono"
+                                       Margin="24,2,0,0"/>
+                        </StackPanel>
+                    </ListBoxItem>
+                    <ListBoxItem IsEnabled="False" Padding="0,10,0,10">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock 
+                                Text="——————————————————————"
+                                Padding="0"
+                                Margin="0"/>
+                        </StackPanel>
+                    </ListBoxItem>
+                    <ListBoxItem Tag="10" Tapped="ListBoxItem_Tapped" Name="SettingItem">
+                        <!--设置-->
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE713;" 
+                                       FontSize="28" 
+                                       FontFamily="Segoe MDL2 Assets"
+                                       TextAlignment="Center"
+                                       Padding="0,4,0,0"/>
+                            <TextBlock Text="设置" 
+                                       FontSize="20"
+                                       FontFamily="XHei Ubuntu Mono"
+                                       Margin="24,3,0,0"/>
+                        </StackPanel>
+                    </ListBoxItem>
+                </ListBox>
+            </SplitView.Pane>
+            <SplitView.Content>
+                <Frame Name="MainFrame" MinWidth="500">
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="hello world"></TextBlock>
+                </Frame>
+            </SplitView.Content>
+        </SplitView>
     </Grid>
 </Page>

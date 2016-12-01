@@ -1,0 +1,47 @@
+﻿<ContentDialog
+    x:Class="yoke.novel.FontDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:yoke.novel"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:components="using:yoke.novel.Components"
+    mc:Ignorable="d"
+    Title="字体设置"
+    PrimaryButtonText="确定"
+    SecondaryButtonText="取消"
+    PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
+    SecondaryButtonClick="ContentDialog_SecondaryButtonClick">
+
+    <StackPanel>
+        <ComboBox Name="FontList" Width="200" Margin="0,10,0,10" DisplayMemberPath="Name"></ComboBox>
+        <StackPanel Orientation="Horizontal">
+            <Button Content="Font Color" Width="100">
+                <Button.Flyout>
+                    <Flyout x:Name="colorFlyout">
+                        <components:UWPColorPickerControl Width="400" Height="Auto" ColorSelected="UWPColorPickerControl_ColorSelected" x:Name="colorPicker"></components:UWPColorPickerControl>
+                    </Flyout>
+                </Button.Flyout>
+            </Button>
+            <Rectangle Margin="12,0,0,0"  Width="50" Fill="Black" Name="colorRect"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+            <Button Content="Bg Color" Width="100">
+                <Button.Flyout>
+                    <Flyout x:Name="colorFlyout2">
+                        <components:UWPColorPickerControl Width="400" Height="Auto" ColorSelected="ColorPicker2_OnColorSelected" x:Name="colorPicker2"></components:UWPColorPickerControl>
+                    </Flyout>
+                </Button.Flyout>
+            </Button>
+            <Rectangle Margin="12,0,0,0"  Width="50" Fill="Black" Name="colorRect2"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+            <TextBlock Text="Font Size" Width="100" VerticalAlignment="Center"></TextBlock>
+            <TextBox x:Name="FontSizeInput" Margin="12,0,0,0" Width="100"></TextBox>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+            <TextBlock Text="Line Size" Width="100" VerticalAlignment="Center"></TextBlock>
+            <TextBox x:Name="LineSizeInput" Margin="12,0,0,0" Width="100"></TextBox>
+        </StackPanel>
+    </StackPanel>
+</ContentDialog>

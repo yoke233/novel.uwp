@@ -23,6 +23,24 @@ namespace yoke.novel
     sealed partial class App : Application
     {
         /// <summary>
+        /// 是否总是显示导航栏
+        /// </summary>
+        internal static bool AlwaysShowNavigation
+        {
+            get; set;
+        }
+        /// <summary>
+        /// 主题
+        /// </summary>
+        internal static ApplicationTheme Theme
+        {
+            get; set;
+        }
+        internal static Dictionary<string, object> PageState
+        {
+            get; set;
+        }
+        /// <summary>
         /// 初始化单一实例应用程序对象。这是执行的创作代码的第一行，
         /// 已执行，逻辑上等同于 main() 或 WinMain()。
         /// </summary>
@@ -30,6 +48,8 @@ namespace yoke.novel
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+            LoadConfig();
+            Application.Current.RequestedTheme = App.Theme;
         }
 
         /// <summary>
@@ -101,6 +121,32 @@ namespace yoke.novel
             var deferral = e.SuspendingOperation.GetDeferral();
             //TODO: 保存应用程序状态并停止任何后台活动
             deferral.Complete();
+        }
+
+        /// <summary>
+        /// 加载配置项
+        /// </summary>
+        private void LoadConfig()
+        {
+            Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+
+            if (localSettings.Values["AlwaysShowNavigation"] != null)
+            {
+                App.AlwaysShowNavigation = (bool)localSettings.Values["AlwaysShowNavigation"];
+            }
+            else
+            {
+                App.AlwaysShowNavigation = true;
+            }
+
+            if (localSettings.Values["Theme"] != null)
+            {
+                App.Theme = (ApplicationTheme)Enum.Parse(typeof(ApplicationTheme), localSettings.Values["Theme"].ToString());
+            }
+            else
+            {
+                App.Theme = ApplicationTheme.Light;
+            }
         }
     }
 }
