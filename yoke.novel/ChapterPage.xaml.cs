@@ -1,17 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.System;
 using Windows.UI;
-using Windows.UI.Text;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Documents;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
@@ -31,7 +22,10 @@ namespace yoke.novel
     /// </summary>
     public sealed partial class ChapterPage : Page
     {
-        private ChapterPageBean chapterPageBean;
+        private Boolean ChangeBookSource = false;
+        private Boolean ChangeChapterSource = false;
+
+        private ChapterPageBean chapter;
 
         private InstalledFont InstalledFont;
 
@@ -98,13 +92,14 @@ namespace yoke.novel
             object[] parameters = e.Parameter as object[];
             if (parameters?.Length == 1 && (parameters[0] as ChapterPageBean) != null)
             {
-                chapterPageBean = (ChapterPageBean) parameters[0];
+                chapter = (ChapterPageBean) parameters[0];
                 render();
             }
         }
 
         private async void render()
         {
+            RichTextBlock.Focus(FocusState.Programmatic);
             Loading.IsActive = true;
             RichTextBlock.Blocks.Clear();
             using (var conn = DbUtil.GetDbConnection())
@@ -112,9 +107,9 @@ namespace yoke.novel
                 ChapterDb chapterDb;
                 var a =
                     conn.Query<ChapterDb>("select * from ChapterDb where book_id = ? and toc_id = ? and `index` = ?;",
-                        chapterPageBean.BookId,
-                        chapterPageBean.TocId,
-                        chapterPageBean.ChapterIndex);
+                        chapter.BookId,
+                        chapter.TocId,
+                        chapter.ChapterIndex);
                 if (a.Count == 1)
                 {
                     chapterDb = a[0];
@@ -123,7 +118,7 @@ namespace yoke.novel
                 else
                 {
                     ChapterResult result =
-                        await Chapter2Service.GetDetail(chapterPageBean.ChapterList[chapterPageBean.ChapterIndex].link);
+                        await Chapter2Service.GetDetail(chapter.ChapterList[chapter.ChapterIndex].link);
                     if (result != null)
                     {
                         if (result.chapter.id != null)
@@ -136,9 +131,9 @@ namespace yoke.novel
                         }
 
                         chapterDb = new ChapterDb();
-                        chapterDb.book_id = chapterPageBean.BookId;
-                        chapterDb.toc_id = chapterPageBean.TocId;
-                        chapterDb.index = chapterPageBean.ChapterIndex;
+                        chapterDb.book_id = chapter.BookId;
+                        chapterDb.toc_id = chapter.TocId;
+                        chapterDb.index = chapter.ChapterIndex;
                         chapterDb.body = text;
                         chapterDb.title = result.chapter.title;
                         conn.Insert(chapterDb);
@@ -146,18 +141,34 @@ namespace yoke.novel
                     else
                     {
                         chapterDb = new ChapterDb();
-                        chapterDb.title = "章节出现异常";
-                        chapterDb.body = "章节出现异常";
+                        text = "章节出现异常";
+                        chapterDb.title = text;
+                        chapterDb.body = text;
                     }
                 }
 
                 PageTitle.Text = chapterDb.title;
 
-                var bookDb = conn.Table<BookDb>().Where(v => v.id == chapterPageBean.BookId).Take(1).FirstOrDefault();
+                var bookDb = conn.Table<BookDb>().Where(v => v.id == chapter.BookId).Take(1).FirstOrDefault();
                 if (bookDb != null)
                 {
+                    if (ChangeBookSource)
+                    {
+                        ChangeBookSource = false;
+                        bookDb.toc_id = chapter.TocId;
+                        bookDb.lastChapterIndex = chapter.ChapterIndex;
+                    }
+                    else if (ChangeChapterSource)
+                    {
+                        ChangeChapterSource = false;
+                        chapter.ChapterIndex = bookDb.lastChapterIndex;
+                        chapter.TocId = bookDb.toc_id;
+                    }
+                    else
+                    {
+                        bookDb.lastChapterIndex = chapter.ChapterIndex;
+                    }
                     bookDb.lastOpenTime = DateTime.Now;
-                    bookDb.lastChapterIndex = chapterPageBean.ChapterIndex;
                     conn.Update(bookDb);
                 }
             }
@@ -190,18 +201,18 @@ namespace yoke.novel
 
         private void PrevPage_OnClick(object sender, RoutedEventArgs e)
         {
-            if (chapterPageBean.ChapterIndex > 0)
+            if (chapter.ChapterIndex > 0)
             {
-                chapterPageBean.ChapterIndex = chapterPageBean.ChapterIndex - 1;
+                chapter.ChapterIndex = chapter.ChapterIndex - 1;
                 render();
             }
         }
 
         private void NextPage_OnClick(object sender, RoutedEventArgs e)
         {
-            if (chapterPageBean.ChapterIndex < (chapterPageBean.ChapterList.Count - 1))
+            if (chapter.ChapterIndex < (chapter.ChapterList.Count - 1))
             {
-                chapterPageBean.ChapterIndex = chapterPageBean.ChapterIndex + 1;
+                chapter.ChapterIndex = chapter.ChapterIndex + 1;
                 render();
             }
         }
@@ -262,12 +273,27 @@ namespace yoke.novel
         private async void More_OnClick(object sender, RoutedEventArgs e)
         {
             ChapterListDialog chapterListDialog = new ChapterListDialog();
-            chapterListDialog.init(chapterPageBean.ChapterList, chapterPageBean.ChapterIndex);
+            chapterListDialog.init(chapter.ChapterList, chapter.ChapterIndex);
             ContentDialogResult result = await chapterListDialog.ShowAsync();
             if (chapterListDialog.SelectedChapter != null)
             {
-                chapterPageBean.ChapterIndex = chapterListDialog.SelectedChapter.index;
+                chapter.ChapterIndex = chapterListDialog.SelectedChapter.index;
                 render();
+            }
+        }
+
+        private async void ChangeToc_OnClick(object sender, RoutedEventArgs e)
+        {
+            ChangeTocDialog changeTocDialog = new ChangeTocDialog();
+            changeTocDialog.BookId = chapter.BookId;
+            ContentDialogResult result = await changeTocDialog.ShowAsync();
+            if (changeTocDialog.TocChapterList != null)
+            {
+                chapter.ChapterList = changeTocDialog.TocChapterList.chapters;
+                chapter.TocId = changeTocDialog.BookToc._id;
+                ChangeBookSource = changeTocDialog.ChangeAll;
+                ChangeChapterSource = !ChangeBookSource;
+                More_OnClick(null, null);
             }
         }
     }

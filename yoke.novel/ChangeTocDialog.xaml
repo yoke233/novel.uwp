@@ -1,0 +1,45 @@
+﻿<ContentDialog
+    x:Class="yoke.novel.ChangeTocDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:yoke.novel"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:model="using:yoke.novel.Model"
+    mc:Ignorable="d"
+    Title="换源"
+    SecondaryButtonText="取消"
+    SecondaryButtonClick="ContentDialog_SecondaryButtonClick"
+    Loaded="ChangeTocDialog_OnLoaded">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+        <CheckBox Grid.Row="0" x:Name="CheckBox" Content="全本换源"></CheckBox>
+        <ListView Grid.Row="1" Margin="0,10,0,0" x:Name="ListView"
+                  MinHeight="200"
+                  MaxHeight="500"
+                  Width="360"
+                  IsItemClickEnabled="True"
+                  ItemClick="ListView_OnItemClick">
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="model:BookToc">
+                    <StackPanel Orientation="Vertical" Margin="10">
+                        <TextBlock FontSize="20" Text="{x:Bind name}" />
+                        <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
+                            <TextBlock Width="200" FontSize="16" Text="{x:Bind lastChapter}" />
+                            <TextBlock Margin="10,0,0,0" FontSize="16" Text="{x:Bind updated}" />
+                        </StackPanel>
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <ProgressRing Grid.Row="1"
+                      Name="Loading"
+                      IsActive="false"
+                      Width="100"
+                      Height="100" />
+    </Grid>
+</ContentDialog>

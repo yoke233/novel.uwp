@@ -101,6 +101,9 @@
     <Compile Include="BookshelfPage.xaml.cs">
       <DependentUpon>BookshelfPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ChangeTocDialog.xaml.cs">
+      <DependentUpon>ChangeTocDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ChapterListDialog.xaml.cs">
       <DependentUpon>ChapterListDialog.xaml</DependentUpon>
     </Compile>
@@ -208,6 +211,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="BookshelfPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ChangeTocDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

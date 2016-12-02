@@ -54,6 +54,14 @@
                     RelativePanel.AlignVerticalCenterWithPanel="True"
                     Background="Transparent"
                     Click="Font_OnClick" />
+            <Button Name="ChangeToc"
+                    Content="&#xE8EB;"
+                    FontFamily="Segoe MDL2 Assets"
+                    FontSize="24"
+                    RelativePanel.LeftOf="Font"
+                    RelativePanel.AlignVerticalCenterWithPanel="True"
+                    Background="Transparent"
+                    Click="ChangeToc_OnClick" />
         </RelativePanel>
         <ScrollViewer Name="ScrollViewer"
                       Grid.Row="1"
