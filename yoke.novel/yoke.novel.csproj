@@ -143,6 +143,7 @@
       <DependentUpon>SettingPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utils\InstalledFont.cs" />
+    <Compile Include="Utils\LevenshteinDistance.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">

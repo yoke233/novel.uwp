@@ -53,9 +53,9 @@ namespace yoke.novel
                 string str = localSettings.Values["FontColor"].ToString();
                 str = str.Substring(3);
                 var rgb = int.Parse(str, System.Globalization.NumberStyles.HexNumber);
-                var r = (byte)((rgb >> 16) & 0xff);
-                var g = (byte)((rgb >> 8) & 0xff);
-                var b = (byte)((rgb >> 0) & 0xff);
+                var r = (byte) ((rgb >> 16) & 0xff);
+                var g = (byte) ((rgb >> 8) & 0xff);
+                var b = (byte) ((rgb >> 0) & 0xff);
                 FontColor = Color.FromArgb(0xff, r, g, b);
             }
             if (localSettings.Values.ContainsKey("BgColor"))
@@ -63,9 +63,9 @@ namespace yoke.novel
                 string str = localSettings.Values["BgColor"].ToString();
                 str = str.Substring(3);
                 var rgb = int.Parse(str, System.Globalization.NumberStyles.HexNumber);
-                var r = (byte)((rgb >> 16) & 0xff);
-                var g = (byte)((rgb >> 8) & 0xff);
-                var b = (byte)((rgb >> 0) & 0xff);
+                var r = (byte) ((rgb >> 16) & 0xff);
+                var g = (byte) ((rgb >> 8) & 0xff);
+                var b = (byte) ((rgb >> 0) & 0xff);
                 BgColor = Color.FromArgb(0xff, r, g, b);
             }
             if (localSettings.Values.ContainsKey("SFontSize"))
@@ -74,7 +74,7 @@ namespace yoke.novel
             }
             if (localSettings.Values.ContainsKey("SLineSize"))
             {
-                LineSize = (int)localSettings.Values["SLineSize"];
+                LineSize = (int) localSettings.Values["SLineSize"];
             }
 
             applySetting();
@@ -188,6 +188,7 @@ namespace yoke.novel
             }
 
             // Add paragraph to the rich text block
+            ScrollViewer.ChangeView(0, 0, ScrollViewer.ZoomFactor);
             Loading.IsActive = false;
         }
 
@@ -230,7 +231,7 @@ namespace yoke.novel
             else if (e.Key == VirtualKey.Space)
             {
                 ScrollViewer.ChangeView(ScrollViewer.HorizontalOffset,
-                    ScrollViewer.VerticalOffset + ScrollViewer.ViewportHeight, ScrollViewer.ZoomFactor);
+                    ScrollViewer.VerticalOffset + ScrollViewer.ViewportHeight * 0.8, ScrollViewer.ZoomFactor);
             }
         }
 
@@ -291,6 +292,24 @@ namespace yoke.novel
             {
                 chapter.ChapterList = changeTocDialog.TocChapterList.chapters;
                 chapter.TocId = changeTocDialog.BookToc._id;
+
+                //前后10个内取相似度最高的作为index
+                int startI = Math.Max(0, chapter.ChapterIndex - 10);
+                int endI = Math.Min(chapter.ChapterList.Count, chapter.ChapterIndex + 10);
+                int maxIndex = chapter.ChapterIndex;
+                decimal maxDistance = 0;
+                decimal tempDistance = 0;
+                for (int i = startI; i < endI; i++)
+                {
+                    tempDistance = LevenshteinDistance.Instance.LevenshteinDistancePercent(PageTitle.Text, chapter.ChapterList[i].title);
+                    if (tempDistance > maxDistance)
+                    {
+                        maxDistance = tempDistance;
+                        maxIndex = i;
+                    }
+                }
+                chapter.ChapterIndex = maxIndex;
+
                 ChangeBookSource = changeTocDialog.ChangeAll;
                 ChangeChapterSource = !ChangeBookSource;
                 More_OnClick(null, null);

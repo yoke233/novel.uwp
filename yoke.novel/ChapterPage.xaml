@@ -81,9 +81,9 @@
                                FontSize="24"
                                FontFamily="XHei Ubuntu Mono" />
                 <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
-                    <HyperlinkButton Name="prevPage" Content="上一页" Click="PrevPage_OnClick" />
-                    <TextBlock Width="50" />
-                    <HyperlinkButton Name="nextPage" Content="下一页" Click="NextPage_OnClick" />
+                    <HyperlinkButton Name="prevPage" FontSize="20" Content="上一页" Click="PrevPage_OnClick" />
+                    <TextBlock Width="120" Height="80" />
+                    <HyperlinkButton Name="nextPage" FontSize="20" Content="下一页" Click="NextPage_OnClick" />
                 </StackPanel>
             </Grid>
         </ScrollViewer>
