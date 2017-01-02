@@ -27,7 +27,10 @@ namespace yoke.novel
 
         private ChapterPageBean chapter;
 
-        private InstalledFont InstalledFont;
+        private InstalledFont InstalledFont= new InstalledFont()
+        {
+            Name = "Segoe UI"
+        };
 
         private Color FontColor = Colors.Black;
 
