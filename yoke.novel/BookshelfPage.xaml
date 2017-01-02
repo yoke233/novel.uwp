@@ -51,9 +51,17 @@
                           Padding="10,10,10,10"
                           SelectionMode="None"
                           IsItemClickEnabled="True"
+                          IsRightTapEnabled="True"
+                          RightTapped="SearchResultListView_OnRightTapped"
                           ItemsSource="{x:Bind _listBooks}"
-                          ItemClick="SearchResultListView_OnItemClick"
-                          >
+                          ItemClick="SearchResultListView_OnItemClick" >
+            <ListView.Resources>
+                <MenuFlyout x:Name="allContactsMenuFlyout">
+                    <MenuFlyout.Items>
+                        <MenuFlyoutItem x:Name="Remove" Text="Remove" Click="Remove_Click" />
+                    </MenuFlyout.Items>
+                </MenuFlyout>
+            </ListView.Resources>
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="data:BookDb">
                     <Grid Padding="5,5,5,5">

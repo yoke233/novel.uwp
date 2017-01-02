@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Input;
 using ServiceStack;
 using yoke.novel.Db;
 using yoke.novel.Model;
@@ -28,7 +29,7 @@ namespace yoke.novel
         {
             using (var conn = DbUtil.GetDbConnection())
             {
-                var query = conn.Table<BookDb>().OrderByDescending(v => v.updated);
+                var query = conn.Table<BookDb>().OrderByDescending(v => v.lastOpenTime);
                 var bookDbs = query.ToList();
                 foreach (var bookDb in bookDbs)
                 {
@@ -65,6 +66,25 @@ namespace yoke.novel
             if (this.Frame.CanGoBack)
             {
                 this.Frame.GoBack();
+            }
+        }
+
+        private BookDb Book;
+        private void SearchResultListView_OnRightTapped(object sender, RightTappedRoutedEventArgs e)
+        {
+            ListView listView = (ListView)sender;
+            allContactsMenuFlyout.ShowAt(listView, e.GetPosition(listView));
+            Book = (BookDb) ((FrameworkElement)e.OriginalSource).DataContext;
+        }
+
+        private void Remove_Click(object sender, RoutedEventArgs e)
+        {
+            using (var conn = DbUtil.GetDbConnection())
+            {
+                conn.Table<BookDb>().Delete(v => v.id == Book.id);
+                conn.Table<ChapterDb>().Delete(v => v.book_id == Book.id);
+                _listBooks.Remove(Book);
+                this.Bindings.Update();
             }
         }
     }

@@ -128,7 +128,7 @@
                             Padding="10,0,10,0"
                             VerticalAlignment="Center" />
 
-                        <ComboBox x:Name="TocBox" Width="150" DisplayMemberPath="name">
+                        <ComboBox x:Name="TocBox" Width="150" DisplayMemberPath="name" SelectionChanged="TocBox_OnSelectionChanged">
                         </ComboBox>
                         
                         <Button Content="下载目录" Click="ButtonBase_OnClick"></Button>

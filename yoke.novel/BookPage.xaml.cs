@@ -78,7 +78,7 @@ namespace yoke.novel
         private async void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
             Loading.IsActive = true;
-            bookToc = (BookToc) TocBox.SelectionBoxItem;
+            bookToc = (BookToc) TocBox.SelectedItem;
             if (bookToc != null)
             {
                 tocChapterList = await BookService.GetBookTocChapters(bookToc._id);
@@ -117,6 +117,10 @@ namespace yoke.novel
                     }
                 }
             }
+            else
+            {
+                Loading.IsActive = false;
+            }
         }
 
         private void ChapterList_OnItemClick(object sender, ItemClickEventArgs e)
@@ -130,6 +134,11 @@ namespace yoke.novel
             };
 
             this.Frame.Navigate(typeof(ChapterPage), new object[] {chapterPageBean});
+        }
+
+        private void TocBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ButtonBase_OnClick(null, null);
         }
     }
 }

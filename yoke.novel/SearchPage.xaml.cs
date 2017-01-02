@@ -14,7 +14,6 @@ namespace yoke.novel
     /// </summary>
     public sealed partial class SearchPage : Page
     {
-
         private ObservableCollection<SearchBook> _listBooks = new ObservableCollection<SearchBook>();
 
         public SearchPage()
@@ -25,14 +24,16 @@ namespace yoke.novel
 
         private async void SearchBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
-            SearchAutoComplete autoComplete = await SearchService.AutoComplete(SearchBox.Text);
-            if (autoComplete != null && autoComplete.ok)
-            {
-                SearchBox.ItemsSource = autoComplete.keywords;
-            }
+            //            SearchAutoComplete autoComplete = await SearchService.AutoComplete(SearchBox.Text);
+            //            if (autoComplete != null && autoComplete.ok)
+            //            {
+            //                SearchBox.ItemsSource = autoComplete.keywords;
+            //            }
+            SearchBox_SuggestionChosen(null, null);
         }
 
-        private async void SearchBox_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
+        private async void SearchBox_SuggestionChosen(AutoSuggestBox sender,
+            AutoSuggestBoxSuggestionChosenEventArgs args)
         {
             Loading.IsActive = true;
             SearchResult result = await SearchService.Search(SearchBox.Text);
@@ -50,12 +51,11 @@ namespace yoke.novel
 
         private void RefreshButton_Click(object sender, RoutedEventArgs e)
         {
-
         }
 
         private void BlogsListView_ItemClick(object sender, ItemClickEventArgs e)
         {
-            this.Frame.Navigate(typeof(BookPage), new object[] { e.ClickedItem });
+            this.Frame.Navigate(typeof(BookPage), new object[] {e.ClickedItem});
         }
 
         private void Back_Click(object sender, RoutedEventArgs e)
